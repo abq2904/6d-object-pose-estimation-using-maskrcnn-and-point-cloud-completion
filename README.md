@@ -29,25 +29,20 @@ The thesis explores **2D planar grasping** and **full 3D pose estimation**, brid
 
 ## 🔄 Pipeline
 
-````mermaid
 ```mermaid
 flowchart TD
+    A["📷 RGB Image Input"] --> B["🧠 Mask R-CNN Object Detection"]
+    B --> C["🎯 Instance Segmentation Mask"]
+    C --> D["🗂 Object Cropping & Preprocessing"]
+    D --> E["📦 Point Cloud & Depth Integration"]
+    E --> F["🔷 Point Cloud Completion Network (PCN)"]
+    F --> G["📐 Feature Extraction & Descriptor Computation"]
+    G --> H["🧮 Pose Estimation Module (6D)"]
+    H --> I["📌 6D Pose Output: Rotation (R) + Translation (T)"]
+    I --> J["📊 Evaluation Metrics"]
+    J --> K["✅ ADD / ADD-S / IoU / Reprojection Error"]
 
-A[📷 RGB Image Input] --> B[🧠 Mask R-CNN Object Detection]
-B --> C[🎯 Instance Segmentation Mask]
-C --> D[🗂 Object Cropping & Preprocessing]
-
-D --> E[📦 Point Cloud / Depth Integration]
-E --> F[🔷 Point Cloud Completion Network]
-
-F --> G[📐 Feature Extraction]
-G --> H[🧮 Pose Estimation Module]
-
-H --> I[📌 6D Pose Output<br/>Rotation (R) + Translation (T)]
-
-I --> J[📊 Evaluation Metrics]
-J --> K[ADD / ADD-S / IoU / Reprojection Error]
-````
+```
 
 ---
 
