@@ -1,0 +1,42 @@
+# =========================
+# Python
+# =========================
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.so
+
+# Virtual Environment
+venv/
+.env/
+env/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Dataset folders
+data/
+datasets/
+
+# Model weights
+models/
+*.pth
+*.pt
+*.ckpt
+
+# Logs
+logs/
+*.log
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Custom ignores
+grasp_configuration/
+copilot_context.txt
