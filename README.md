@@ -1,139 +1,183 @@
 # 🛠️ 6D Object Pose Estimation Thesis Project
 
-> Exploring robust 6D object pose estimation, grasping, and point cloud completion using deep learning, 3D vision, and advanced robotics techniques.
+> Explore **robust 6D object pose estimation**, **planar grasping**, and **point cloud processing** using RGB images, classical computer vision, and deep learning. Enables accurate **pose recovery** and **grasp configuration generation** for robotic manipulation using only RGB datasets.
 
 ---
 
 ## 📖 Project Overview
 
-The goal of this project is to **accurately estimate the 6D pose of objects** in cluttered environments using RGB-D sensors and deep learning methods. This includes:
+This project demonstrates a **lightweight and accessible pipeline** for estimating the **6D pose (position + orientation) of planar objects** from standard RGB images. It avoids expensive sensors (like depth cameras) and works with free web datasets.
 
-- **Object detection & instance segmentation** (Mask R-CNN, ConvPoseCNN)
-- **Point cloud extraction & completion** (PCN – Point Completion Network)
-- **Pose estimation & grasp planning** for robotic manipulation
-- **Simulation & validation** using tools like V-REP / CoppeliaSim
+Key highlights:
 
-The thesis explores **2D planar grasping** and **full 3D pose estimation**, bridging **computer vision**, **robotics**, and **AI-based grasping strategies**.
+- Automated **dataset preprocessing** ensures uniform size, color, and aspect ratio.
+- **YOLOv8** object detection isolates the object and crops it.
+- **ORB keypoints** are extracted and matched across images.
+- **Homography estimation** recovers planar transformations.
+- **6D pose recovery** identifies the physically valid rotation and translation.
+- Generates **grasp configurations** (approach vector, closing vector) for robotic arms.
+
+This is foundational for:
+
+- **Robotic grasping** and object manipulation
+- **Augmented reality (AR)** object alignment
+- **Industrial inspection** of planar objects
+
+---
+
+## 🖼️ Showcase Images
+
+### 1️⃣ Raw Image
+
+![Raw Image](showcase_pictures/bottle_raw.jpg "Raw French's yellow mayonnaise bottle image")
+
+### 2️⃣ Preprocessed / Cropped Image
+
+![Cropped Image](showcase_pictures/bottle_cropped.jpg "Cropped and preprocessed bottle image")
+
+### 3️⃣ Keypoints Visualization
+
+![Keypoints](showcase_pictures/bottle_keypoints.jpg "ORB keypoints detected on the bottle")
+
+### 4️⃣ Feature Matches
+
+![Feature Matches](showcase_pictures/bottle_matches.jpg "Feature matches between image pairs")
+
+### 5️⃣ Homography Estimation
+
+![Homography](showcase_pictures/bottle_homography.jpg "Homography visualization between image pairs")
+
+### 6️⃣ 6D Pose Axes
+
+![6D Pose Axes](showcase_pictures/bottle_pose_axes.jpg "Recovered 6D pose visualized with axes (X-red, Y-green, Z-blue)")
+
+### 7️⃣ Grasp Configuration
+
+![Grasp Config](showcase_pictures/bottle_grasp.jpg "Computed grasp configuration for robotic arm")
+
+> These images illustrate **every stage of the pipeline**, from raw image to pose recovery and grasp visualization.
+
+---
+
+## 📂 Project Structure
+
+```
+6D_Object_Pose_Estimation/
+│
+├─ .venv/ # Python virtual environment
+├─ data/
+│ ├─ raw_images/
+│ │ └─ Frenchs_yellow_mayonnaise_bottle/
+│ ├─ processed_images/
+│ │ └─ Frenchs_yellow_mayonnaise_bottle/
+│ ├─ detections/
+│ │ └─ Frenchs_yellow_mayonnaise_bottle/
+│ │ ├─ cropped/
+│ │ └─ bboxes.json
+│ ├─ features/
+│ │ ├─ keypoints/
+│ │ ├─ matches/
+│ │ ├─ homography/
+│ │ ├─ pose/
+│ │ └─ grasp/
+│ └─ models/ # Optional 3D object models
+│
+├─ showcase_pictures/ # Images for README / portfolio
+├─ 01_download_images.py
+├─ 02_preprocessing.py
+├─ 03_object_detection_yolo.py
+├─ 04_keypoints.py
+├─ 05_feature_matching.py
+├─ 06_estimate_homography.py
+├─ 07_pose_from_homography.py
+├─ 08_visualize_pose.py
+├─ 09_compute_grasp.py
+├─ requirements.txt
+├─ README.md
+└─ understanding.md # Notes & methodology
+```
+
+---
+
+## ⚙️ Dependencies
+
+- Python >= 3.10
+- [OpenCV](https://opencv.org)
+- [NumPy](https://numpy.org)
+- [Matplotlib](https://matplotlib.org)
+- [Ultralytics YOLOv8](https://docs.ultralytics.com)
+- [Pillow](https://python-pillow.org)
+
+Install via:
+
+```
+pip install -r requirements.txt
+```
+
+---
+
+## 🛠 Pipeline Workflow (Steps 01–09)
+
+1. **Download Images** – Automated download of target object images.
+2. **Preprocessing** – Resize, crop, RGB conversion, and padding.
+3. **Object Detection (YOLOv8)** – Detect object and save bounding boxes.
+4. **Feature Extraction (ORB)** – Extract keypoints and descriptors.
+5. **Feature Matching** – Find correspondences between image pairs.
+6. **Homography Estimation** – Compute planar transformation.
+7. **Pose Estimation** – Decompose homography into 4 candidate 6D poses; select physically valid pose.
+8. **Visualization** – Draw axes on image to illustrate pose.
+9. **Grasp Planning** – Generate approach vector, closing direction, and grasp center.
+
+---
+
+## 📈 Results
+
+- **Images processed:** 44
+- **Object detection:** Successful for most images
+- **ORB keypoints:** Extracted & visualized
+- **Feature matches:** Hundreds of correspondences per pair
+- **6D pose recovery:** Valid rotation & translation
+- **Grasp configuration:** Approach & close vectors calculated
+
+✅ Fully works with **RGB images only** , without depth sensors.
+
+---
+
+## 🔄 Pipeline Flow (Visual)
+
+```mermaid
+flowchart TD
+    A["📷 RGB Image Input"] --> B["🧠 YOLOv8 Object Detection"]
+    B --> C["🎯 Instance Segmentation / Cropping"]
+    C --> D["📦 Feature Extraction (ORB)"]
+    D --> E["🧮 Feature Matching & Homography"]
+    E --> F["📐 Pose Estimation (6D)"]
+    F --> G["🤖 Grasp Configuration"]
+    G --> H["📊 Visualization / Showcase Images"]
+```
+
+---
+
+## 💡 Use Cases
+
+- Lightweight **6D pose estimation** for robots, AR, and industrial inspection.
+- Can scale from **single-object** to multi-object datasets.
+- Generates **grasp-ready configurations** for robotic manipulation.
+- Supports **reproducibility** using free RGB images.
 
 ---
 
 ## 🎯 Vision & Goals
 
-- Develop a **robust pipeline** for 6D object pose estimation from RGB-D images.
-- Enable **accurate grasp planning** for robotic arms in real-world environments.
-- Use **deep learning architectures** (Mask R-CNN, ConvPoseCNN, PCN) for perception tasks.
-- Provide **scalable and reusable datasets** for training and testing future robotics systems.
-- Integrate with **simulation environments** for experimental validation.
+- Robust **6D pose estimation** pipeline.
+- Accurate **grasp planning** for robotic arms.
+- Integration with **deep learning architectures** for perception.
+- Provide **scalable datasets** and showcase images for research.
 
 ---
 
-## 🔄 Pipeline
+## 🗝️ Tech & Concepts
 
-```mermaid
-flowchart TD
-    A["📷 RGB Image Input"] --> B["🧠 Mask R-CNN Object Detection"]
-    B --> C["🎯 Instance Segmentation Mask"]
-    C --> D["🗂 Object Cropping & Preprocessing"]
-    D --> E["📦 Point Cloud & Depth Integration"]
-    E --> F["🔷 Point Cloud Completion Network (PCN)"]
-    F --> G["📐 Feature Extraction & Descriptor Computation"]
-    G --> H["🧮 Pose Estimation Module (6D)"]
-    H --> I["📌 6D Pose Output: Rotation (R) + Translation (T)"]
-    I --> J["📊 Evaluation Metrics"]
-    J --> K["✅ ADD / ADD-S / IoU / Reprojection Error"]
-
-```
+6D object pose estimation, planar grasp, ORB feature matching, homography estimation, RGB image processing, grasp planning, robotics, 3D vision, PCA, point cloud, deep learning, RGB-only pipeline, visual demonstration, showcase images.
 
 ---
-
-## 🏗️ Current Progress
-
-### 1️⃣ Instance Segmentation
-
-- Mask R-CNN applied on RGB images to detect objects and extract instance masks.
-- Handles multiple object categories and overlapping objects using group IDs.
-- Output: Bounding box, mask, object category.
-
-### 2️⃣ Point Cloud Generation
-
-- RGB + depth image + object mask → generate partial object point cloud.
-- Noise removal using **radius outlier removal** (Open3D).
-- Align depth maps to RGB images for consistent 3D coordinates.
-
-### 3️⃣ Pose Estimation & Grasping
-
-- PCA (Principal Component Analysis) on object point cloud → rotation & orientation.
-- Center position → grasp center; second principal component → close direction.
-- Grasp configuration: **approach vector**, **close vector**, **jaw center**.
-
-### 4️⃣ Point Cloud Completion
-
-- **PCN (Point Completion Network)** used to generate full object shapes from partial scans.
-- Works on both **synthetic datasets (ShapeNet)** and **real datasets (KITTI)**.
-- Folding-based decoder upsamples coarse predictions → fine-grained point clouds.
-
----
-
-## ⚠️ Problems & Challenges
-
-- **Noisy instance segmentation** → requires robust point cloud denoising.
-- **Incomplete point clouds** → some objects partially occluded; PCN helps but not perfect.
-- **Limited real-world datasets** → synthetic datasets do not fully cover real-world variations.
-- **Pose ambiguity in planar grasping** → rotational symmetry of objects can mislead PCA.
-- **Math equations & transformations** sometimes lost in documentation → careful review needed.
-
----
-
-## 🚀 Future Work & Next Steps
-
-1. **Integrate full 6D pose estimation** into a real robotic grasping pipeline.
-2. **Improve dataset coverage** by adding real-world scans with multiple object categories.
-3. **Optimize network architectures** for real-time inference (ConvPoseCNN, PCN enhancements).
-4. **Extend grasping strategies** to 3D manipulation beyond planar grasping.
-5. **Automate pipeline**: from detection → point cloud → pose → grasp → simulation.
-6. **Documentation & reproducibility**: Clean, structured markdown, datasets, and scripts.
-
----
-
-## 📅 Milestones
-
-| Milestone                    | Status       | Notes                                       |
-| ---------------------------- | ------------ | ------------------------------------------- |
-| Instance Segmentation        | ✅ Completed | Mask R-CNN trained on 28 objects            |
-| Point Cloud Generation       | ✅ Completed | Partial point clouds extracted and denoised |
-| Pose Estimation (2D planar)  | ✅ Completed | PCA-based angle & center estimation         |
-| Point Cloud Completion (PCN) | ✅ Completed | Synthetic + KITTI dataset evaluation        |
-| Grasp Planning               | ⚠️ Ongoing   | Needs full integration and testing          |
-| Real-world Validation        | ⚠️ Pending   | Hardware setup required                     |
-| Documentation & Reporting    | ⚠️ Ongoing   | This README + understanding.md              |
-
----
-
-## 🔧 Tech Stack & Tools
-
-- **Programming Languages:** Python 3.11+, OpenCV, NumPy, PyTorch, TensorFlow
-- **Deep Learning Models:** Mask R-CNN, ConvPoseCNN, Point Completion Network (PCN)
-- **Libraries:** Open3D, Matplotlib, Pandas, scikit-learn
-- **Simulation Tools:** V-REP / CoppeliaSim
-- **Data Management:** ShapeNet, KITTI, YCB dataset
-- **File Types:** .docx, .pdf, .pptx, .zip, .png, .jpg
-
----
-
-## 🗝️ Technologies
-
-6D object pose estimation, 2D planar grasp, Mask R-CNN, ConvPoseCNN, Point Completion Network, PCN, point cloud denoising, RGB-D object detection, grasp planning, robotic manipulation, deep learning for robotics, Open3D, ShapeNet, KITTI dataset, PCA pose estimation, robotic simulation, V-REP, CoppeliaSim, RGB-D perception, synthetic point cloud dataset, object segmentation, pose estimation research
-
----
-
-## 📌 Notes & References
-
-- Always check **point cloud alignment** between RGB and depth maps.
-- PCA-based orientation may fail on **symmetric objects**.
-- PCN works best for **single-view partial point clouds**, consider **multi-view fusion** for better completion.
-- Simulation experiments in V-REP help validate grasp strategies before real hardware deployment.
-- All datasets and scripts should be **version-controlled** for reproducibility.
-
----
-
-> This project combines **advanced computer vision, deep learning, and robotics** to provide an end-to-end pipeline for object detection, 6D pose estimation, point cloud completion, and grasp planning.
