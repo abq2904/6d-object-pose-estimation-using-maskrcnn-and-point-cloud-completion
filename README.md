@@ -93,8 +93,7 @@ This is foundational for:
 ├─ 08_visualize_pose.py
 ├─ 09_compute_grasp.py
 ├─ requirements.txt
-├─ README.md
-└─ understanding.md # Notes & methodology
+└─ README.md
 ```
 
 ---
